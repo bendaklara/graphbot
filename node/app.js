@@ -543,7 +543,7 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 
-function sendGraphMessage(recipientId, messageText) {
+function sendGraph(recipientId, messageText) {
   graph
   .setAccessToken(app_access_token)
   .setOptions(options)
