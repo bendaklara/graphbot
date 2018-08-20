@@ -550,7 +550,7 @@ function sendGraph(recipientId, messageText) {
   .get("bbc", function(err, res) {
 	var messageData = {
 		recipient: {id: recipientId},
-		message: {text: res,metadata: "DEVELOPER_DEFINED_METADATA"}
+		message: {text: JSON.stringify(res);, metadata: "DEVELOPER_DEFINED_METADATA"}
 	};
 
 	callSendAPI(messageData);
