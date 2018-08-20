@@ -1,0 +1,10 @@
+{
+    "appName":"DataLiza-01-03",
+    "appId":"326199254552320",
+    "appSecret": "7d40c926290eaa0c2121f2ea67df99da",
+    "userAccessToken": "EAAEorS6xjwABAF0ZCY4XKZB1iDauZAHx6TagjsnMIBlz1wG1QVR9CZBr9IeLcqZB6xu6BZCqmmCuQc6nJC5VVWt07qFaQSdBPw2ZCVLvZBHDntXaxBfdZCrBhG4eYnbOXZBi2LFFWf3XdlZAvIRfMVJKltb1DZC2SEzSKEeW7OKa1QuCOUhkZAQrUgxy8",
+    "pageAccessToken": "EAAEorS6xjwABAHw0lUUAZBeLYEEwvKIzwURUeMu6x8B5RTsrFyORY1pLxp9JjGfPPEIMg8WONSvQ0ZAgbUjM0CqQv3uGs3QBcA6lU26dBsmEF7KRlSBc7NKn62u7N6H4Ph5liMKxYK7ZBWKhP0feVFaq0GZAvRFaHQDFS8BOcW0lHfcFc6M7j1l7HdHZAcjQZD",
+    "appAccessToken":"326199254552320|xighGMFhS5Xr24s2_JLfXrw5Pgs",
+    "validationToken": "TOKEN",
+    "serverURL": "to_be_set_manually"
+}
