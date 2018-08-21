@@ -547,7 +547,7 @@ function sendGraph(recipientId, messageText) {
   graph
   .setAccessToken(app_access_token)
   .setOptions(options)
-  .get("bbc", function(err, res) {
+  .get(messageText, function(err, res) {
 	var messageData = {
 		recipient: {id: recipientId},
 		message: {text: JSON.stringify(res), metadata: "DEVELOPER_DEFINED_METADATA"}
