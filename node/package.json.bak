@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "fbgraph": "*",
-	"url": "*",
     "body-parser": "^1.15.0",
     "config": "^1.20.4",
     "ejs": "^2.4.2",

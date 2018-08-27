@@ -19,7 +19,6 @@ const
   request = require('request');
   
 var graph = require('fbgraph');
-var url = require('url');
 
 var options = {
     timeout:  3000
@@ -72,7 +71,6 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
  * setup is the same token used here.
  *
  */
- 
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === VALIDATION_TOKEN) {
@@ -83,7 +81,6 @@ app.get('/webhook', function(req, res) {
     res.sendStatus(403);          
   }  
 });
-
 
 
 /*
@@ -545,262 +542,26 @@ function sendTextMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
-function contains(a, obj) {
-    var i = a.length;
-    while (i--) {
-       if (a[i] === obj) {
-           return true;
-       }
-    }
-    return false;
-}
-
-function graphpagerequests(requeststring) {
-	return new Promise(function(resolve, reject) {
-    // Do the usual XHR stuff
-	var success = '0';
-	//FB Error message set up.
-	var generic_error_message='Generic error message'; // Ezt kapja, ha nem azonosítottuk a hiba okát.
-	//Az üzenetet az elérhető infóval a különböző logikai vizsgálatok alapján feltöltjük tartalommal. 
-	//Ha nem kapna tartalmat, az általános hibára inicializáljuk. 
-	var errormessage=generic_error_message; 
-	
-	graph
-	.setAccessToken(app_access_token)
-	.setOptions(options)
-	.get(requeststring , function(err, fbresponse) {
-		console.log('Raw Fb response: ' + JSON.stringify(fbresponse));
-		//var error10=JSON.parse('{"error":{"message":"(#10) To use Page Public Content Access, your use of this endpoint must be reviewed and approved by Facebook. To submit this Page Public Content Access feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review.","type":"OAuthException","code":10,"fbtrace_id":"ACGe5z+R+cc"}}');
-		//var error803=JSON.parse('{"error": {"message": "(#803) Some of the aliases you requested do not exist: gyurcsany","type": "OAuthException","code": 803,"fbtrace_id": "BEr8GHLx8bd"}}');
-		//var error190=JSON.parse('{"error":{"message":"Invalid OAuth access token signature.","type":"OAuthException","code":190,"fbtrace_id":"GQWHG+ETnCz"}}');
-		//var error1=JSON.parse('{"error":{"message":"Invalid OAuth access token signature.","type":"OAuthException","code":1,"fbtrace_id":"GQWHG+ETnCz"}}');
-		//var error0=JSON.parse('{"error":{"message":"Invalid OAuth access token signature.","type":"OAuthException","fbtrace_id":"GQWHG+ETnCz"}}');
-		//fbresponse=error803;
-		
-		if (fbresponse && fbresponse['error']) {
-			// extract the error from the json
-			console.log('Graph api error!!!!');
-			var error=fbresponse['error'];
-			if (error && error['code']) {
-			// extract the error code
-				var code=error['code'];
-				console.log(code);
-				//Let the message be appropriate to the error code
-				switch (code) {
-					case 10:
-						errormessage='I am only half a bot right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.';
-					break;
-
-					case 803:
-						errormessage='I could not find this page on Facebook. Your fault, not mine. Give me a page that exists!';
-					break;
-
-					case 190:
-						errormessage='Oh my! I am too blushed for a bot right now. There is a problem with my Fb authentication. Please excuse me, but I cannot respond to your queries right now.';
-						break;
-
-					default:
-						//Generic error message. 
-						//message='Ooops! There was an error. How about trying another page?';
-						errormessage=generic_error_message + ' Unknown code.' ;
-				}
-			
-			} else {
-			//Generic error message. 
-			//message='Ooops! There was an error. How about trying another page?';
-			errormessage=generic_error_message + ' No code in error message' ;
-			}
-			reject(errormessage);
-		} else {if (fbresponse && fbresponse['category']) {
-			resolve(fbresponse); //This is the meat of the application
-			} else {
-				errormessage='The message has no error, it has no category, it may not be even a json.'
-				reject(errormessage);
-				
-			}
-		}
-	
-		
-		});	
-
-
-  });
-	
-
-
-}
-
-function graphlikerequests(requeststring) {
-	return new Promise(function(resolve, reject) {
-    // Do the usual XHR stuff
-	var success = '0';
-	//FB Error message set up.
-	var generic_error_message='Generic error message'; // Ezt kapja, ha nem azonosítottuk a hiba okát.
-	//Az üzenetet az elérhető infóval a különböző logikai vizsgálatok alapján feltöltjük tartalommal. 
-	//Ha nem kapna tartalmat, az általános hibára inicializáljuk. 
-	var errormessage=generic_error_message; 
-	
-	graph
-	.setAccessToken(app_access_token)
-	.setOptions(options)
-	.get(requeststring , function(err, fbresponse) {
-		console.log('Raw Fb response: ' + JSON.stringify(fbresponse));
-		//var error10=JSON.parse('{"error":{"message":"(#10) To use Page Public Content Access, your use of this endpoint must be reviewed and approved by Facebook. To submit this Page Public Content Access feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review.","type":"OAuthException","code":10,"fbtrace_id":"ACGe5z+R+cc"}}');
-		//var error803=JSON.parse('{"error": {"message": "(#803) Some of the aliases you requested do not exist: gyurcsany","type": "OAuthException","code": 803,"fbtrace_id": "BEr8GHLx8bd"}}');
-		//var error190=JSON.parse('{"error":{"message":"Invalid OAuth access token signature.","type":"OAuthException","code":190,"fbtrace_id":"GQWHG+ETnCz"}}');
-		//var error1=JSON.parse('{"error":{"message":"Invalid OAuth access token signature.","type":"OAuthException","code":1,"fbtrace_id":"GQWHG+ETnCz"}}');
-		//var error0=JSON.parse('{"error":{"message":"Invalid OAuth access token signature.","type":"OAuthException","fbtrace_id":"GQWHG+ETnCz"}}');
-		//fbresponse=error803;
-		
-		if (fbresponse && fbresponse['error']) {
-			// extract the error from the json
-			console.log('Graph api error!!!!');
-			var error=fbresponse['error'];
-			if (error && error['code']) {
-			// extract the error code
-				var code=error['code'];
-				console.log(code);
-				//Let the message be appropriate to the error code
-				switch (code) {
-					case 10:
-						errormessage='I am only half a bot right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.';
-					break;
-
-					case 803:
-						errormessage='I could not find this page on Facebook. Your fault, not mine. Give me a page that exists!';
-					break;
-
-					case 190:
-						errormessage='Oh my! I am too blushed for a bot right now. There is a problem with my Fb authentication. Please excuse me, but I cannot respond to your queries right now.';
-						break;
-
-					default:
-						//Generic error message. 
-						//message='Ooops! There was an error. How about trying another page?';
-						errormessage=generic_error_message + ' Unknown code.' ;
-				}
-			
-			} else {
-			//Generic error message. 
-			//message='Ooops! There was an error. How about trying another page?';
-			errormessage=generic_error_message + ' No code in error message' ;
-			}
-			reject(errormessage);
-		} else {if (fbresponse && fbresponse['data']) {
-			data=fbresponse['data'];
-			//iterate over data items;
-			resolve(fbresponse['data']); //This is the meat of the application
-			} else {
-				errormessage='The message has no error, it has no category, it may not be even a json.'
-				reject(errormessage);
-				
-			}
-		}
-	
-		
-		});	
-
-  });
-
-}
-
-function parseinput(recipient, adr){
-	var recipientid=recipient;
-	var parsed_adr = url.parse(adr, true);
-	var path=parsed_adr.pathname;
-	console.log(path);
-
-	if (path[path.length-1]==match) {
-		path=path.slice(0, -1);
-		console.log(path + '  A végéről levettem a slasht.');
-	} 
-
-	if (path[0]==match) {
-		path=path.substr(1);
-		console.log(path + '  Az elejéről levettem a slasht.');
-	} 
-
-
-	var slashcount=(path.match(/\//g) || []).length;
-	console.log('Number of slashes in string: ' + slashcount);
-
-	if (slashcount == 0) {
-		console.log(path + '  Ezt már le is lehet kérni a FB-tól.');
-			var pageoutput;
-			var likeoutput;
-			graphpagerequests(adr+ '?fields=name,category').then(function(response) {
-				pageoutput=response;
-				//console.log("Success graphpagerequest! ... ", response)
-				graphlikerequests(adr+'/likes?fields=name,category').then(function(response) {
-					likeoutput=response;
-					//console.log("Success graphlikerequest! ... ", response);
-					//console.log('This is the result of both requests: ');
-					//console.log(pageoutput);
-					//console.log(likeoutput);					
-					var pagecat=pageoutput['category'];
-					var pagename=pageoutput['name'];
-					var likecount=0;
-					var samelikecount=0;
-					var uniquelikecount=0;
-					var likecats=[];
-					var uniquelikestring='';
-					var uniquelikecats=[];
-					for (like of likeoutput) {						
-						likecount++;
-						likecats.push(like['category']);						
-						if (like['category']==pagecat){
-							samelikecount++;
-							//console.log(samelikecount);
-							}
-						}
-					console.log('Likes in the same category:  ' + samelikecount);
-					console.log('Number of likes: ' + likecount);
-					console.log(likecats);
-					for (likecat of likecats) {
-						if (!contains(uniquelikecats, likecat)){
-							uniquelikecats.push(likecat);
-							uniquelikecount++;
-							uniquelikestring=uniquelikestring+likecat+', '  ;
-							}
-						}
-					console.log('Number of unique like categories: ' + uniquelikecount);
-					console.log(uniquelikecats);
-					//Response messages are constructed.
-					var firstmessage='The page ' + pagename + ' belongs to the Category ' + pagecat + '.';
-					var secondmessage='This page likes ' + samelikecount + ' pages in the same Category, out of a total of ' + likecount + ' pages liked.'
-					var thirdmessage='The kinds of pages liked by this page: ' + uniquelikestring;
-					//console.log(firstmessage);
-					//console.log(secondmessage);
-					//console.log(thirdmessage);
-					sendTextMessage(recipipentid, firstmessage);
-					sendTextMessage(recipipentid, secondmessage);
-					sendTextMessage(recipipentid, thirdmessage);
-
-
-					
-					
-
-					}, function(error) {
-					console.log("Failed graphlikerequest! ...");
-					}
-				);
-			
-			;
-			}, function(error) {
-			console.log("Failed graphpagerequest! ...");
-			});
-
-
-		
-	} else {
-		console.log('This is not a Page name.');
-	}	
-}
-
-
 
 function sendGraph(recipientId, messageText) {
-	parseinput(recipientId,messageText);
+  graph
+  .setAccessToken(app_access_token)
+  .setOptions(options)
+  .get(messageText+'?fields=fan_count', function(err, res) {
+	var messageData = {
+		recipient: {id: recipientId},
+		message: {text: 'The page is liked by ' + res['fan_count'] + 'people.', metadata: "DEVELOPER_DEFINED_METADATA"}
+	};
+
+	callSendAPI(messageData);
+	  
+	console.log(res);
+  });
+
+
+  
+	
+
 }
 
 
