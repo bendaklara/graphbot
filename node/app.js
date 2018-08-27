@@ -727,10 +727,10 @@ function parseinput(recipient, adr){
 			var pageoutput;
 			var likeoutput;
 			var recipientfbid;
-			graphpagerequests(recipient, adr+ '?fields=name,category').then(function(response) {
+			graphpagerequests(recipient, path+ '?fields=name,category').then(function(response) {
 				pageoutput=response['response'];
 				//console.log("Success graphpagerequest! ... ", response)
-				graphlikerequests(response['recipient'], adr+'/likes?fields=name,category').then(function(response) {
+				graphlikerequests(response['recipient'], path+'/likes?fields=name,category').then(function(response) {
 					var recipientfbid=response['recipient'];
 					console.log(recipientfbid)
 					likeoutput=response['response'];
