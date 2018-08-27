@@ -726,12 +726,12 @@ function parseinput(recipient, adr){
 		console.log(path + '  Ezt már le is lehet kérni a FB-tól.');
 			var pageoutput;
 			var likeoutput;
-			var recipientfbid;
 			graphpagerequests(recipient, adr+ '?fields=name,category').then(function(response) {
 				pageoutput=response['response'];
 				//console.log("Success graphpagerequest! ... ", response)
 				graphlikerequests(response['recipient'], adr+'/likes?fields=name,category').then(function(response) {
-					recipientfbid=response['recipient'];
+					var recipientfbid=response['recipient'];
+					console.log(recipientfbid);
 					likeoutput=response['response'];
 					//console.log("Success graphlikerequest! ... ", response);
 					//console.log('This is the result of both requests: ');
