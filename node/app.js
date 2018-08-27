@@ -561,7 +561,7 @@ function graphpagerequests(recipientid, requeststring) {
     // Do the usual XHR stuff
 	var success = '0';
 	//FB Error message set up.
-	var generic_error_message='Generic error message'; // Ezt kapja, ha nem azonosítottuk a hiba okát.
+	var generic_error_message='Oops. Something went awry. I have no clue what went wrong.'; // Ezt kapja, ha nem azonosítottuk a hiba okát.
 	//Az üzenetet az elérhető infóval a különböző logikai vizsgálatok alapján feltöltjük tartalommal. 
 	//Ha nem kapna tartalmat, az általános hibára inicializáljuk. 
 	var errormessage=generic_error_message; 
@@ -609,14 +609,14 @@ function graphpagerequests(recipientid, requeststring) {
 			} else {
 			//Generic error message. 
 			//message='Ooops! There was an error. How about trying another page?';
-			errormessage=generic_error_message + ' No code in error message' ;
+			errormessage=generic_error_message + 'Facebook tells me there is an error, but it is not clear what it is.' ;
 			}
-			reject(errormessage);
+			reject({'recipient':recipientid, 'response':errormessage});
 		} else {if (fbresponse && fbresponse['category']) {
 			resolve({'recipient':recipientid, 'response':fbresponse}); //This is the meat of the application
 			} else {
 				errormessage='The message has no error, it has no category, it may not be even a json.'
-				reject(errormessage);
+				reject({'recipient':recipientid, 'response':errormessage});
 				
 			}
 		}
@@ -686,12 +686,12 @@ function graphlikerequests(recipientid, requeststring) {
 			//message='Ooops! There was an error. How about trying another page?';
 			errormessage=generic_error_message + ' No code in error message' ;
 			}
-			reject(errormessage);
+			reject({'recipient':recipientid, 'response':errormessage});
 		} else {if (fbresponse && fbresponse['data']) {
 			resolve({'recipient':recipientid, 'response':fbresponse['data']}); //This is the meat of the application
 			} else {
 				errormessage='The message has no error, it has no category, it may not be even a json.'
-				reject(errormessage);
+				reject({'recipient':recipientid, 'response':errormessage});
 				
 			}
 		}
@@ -718,6 +718,7 @@ function parseinput(recipient, adr){
 		console.log(path + '  Az elejéről levettem a slasht.');
 	} 
 
+	path = path.slice(path.lastIndexOf('-')+1);
 
 	var slashcount=(path.match(/\//g) || []).length;
 	console.log('Number of slashes in string: ' + slashcount);
@@ -726,13 +727,12 @@ function parseinput(recipient, adr){
 		console.log(path + '  Ezt már le is lehet kérni a FB-tól.');
 			var pageoutput;
 			var likeoutput;
-			var recipientfbid;
 			graphpagerequests(recipient, path+ '?fields=name,category').then(function(response) {
 				pageoutput=response['response'];
 				//console.log("Success graphpagerequest! ... ", response)
 				graphlikerequests(response['recipient'], path+'/likes?fields=name,category').then(function(response) {
-					var recipientfbid=response['recipient'];
-					console.log(recipientfbid)
+					//var recipientfbid=response['recipient'];
+					//console.log(recipientfbid)
 					likeoutput=response['response'];
 					//console.log("Success graphlikerequest! ... ", response);
 					//console.log('This is the result of both requests: ');
@@ -746,7 +746,9 @@ function parseinput(recipient, adr){
 					var likecats=[];
 					var uniquelikestring='';
 					var uniquelikecats=[];
-					var forcount=0;					
+					var forcount=0;	
+					var firstmessage='';
+					var secondmessage='';					
 					for (forcount=0; forcount < likeoutput.length; forcount++) {						
 						likecount++;
 						var like=likeoutput[forcount];
@@ -771,28 +773,30 @@ function parseinput(recipient, adr){
 					console.log('Number of unique like categories: ' + uniquelikecount);
 					console.log(uniquelikecats);
 					//Response messages are constructed.
-					var firstmessage='The page ' + pagename + ' belongs to the Category ' + pagecat + '.';
-					var secondmessage='This page likes ' + samelikecount + ' pages in the same Category, out of a total of ' + likecount + ' pages liked.'
-					var thirdmessage='The kinds of pages liked by this page: ' + uniquelikestring;
+					if (uniquelikestring.length>0){
+						secondmessage='The kinds of pages liked by this page: ' + uniquelikestring.slice(0,-2)+'.';
+					}
+					//Response messages are constructed.
+					firstmessage='The page ' + pagename + ' belongs to the Category ' + pagecat + '. This page 💚 likes ' + samelikecount + ' pages in the same Category, out of a total of ' + likecount + ' pages liked.';
+				
+				
 					//console.log(firstmessage);
 					//console.log(secondmessage);
 					//console.log(thirdmessage);
-					sendTextMessage(recipientfbid, firstmessage);
-					sendTextMessage(recipientfbid, secondmessage);
-					sendTextMessage(recipientfbid, thirdmessage);
-
-
-					
+					sendTextMessage(response['recipient'], firstmessage);
+					sendTextMessage(response['recipient'], secondmessage);
 					
 
-					}, function(error) {
-					console.log("Failed graphlikerequest! ...");
+					}, function(error) {						
+					sendTextMessage(error['recipient'], error['response']);						
+					//console.log("Failed graphlikerequest! ...");
 					}
 				);
 			
 			;
 			}, function(error) {
-			console.log("Failed graphpagerequest! ...");
+			sendTextMessage(error['recipient'], error['response']);
+			//console.log("Failed graphpagerequest! ...");
 			});
 
 
