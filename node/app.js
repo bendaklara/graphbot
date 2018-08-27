@@ -688,8 +688,6 @@ function graphlikerequests(requeststring) {
 			}
 			reject(errormessage);
 		} else {if (fbresponse && fbresponse['data']) {
-			data=fbresponse['data'];
-			//iterate over data items;
 			resolve(fbresponse['data']); //This is the meat of the application
 			} else {
 				errormessage='The message has no error, it has no category, it may not be even a json.'
