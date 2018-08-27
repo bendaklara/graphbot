@@ -802,7 +802,8 @@ function parseinput(recipient, adr){
 
 		
 	} else {
-		console.log('This is not a Page name.');
+	
+		sendTextMessage(recipient,'I could not find this page on Facebook. Your fault, not mine. Give me a page that exists!');
 	}	
 }
 
