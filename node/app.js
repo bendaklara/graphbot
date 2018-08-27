@@ -556,7 +556,7 @@ function contains(a, obj) {
     return false;
 }
 
-function graphpagerequests(requeststring) {
+function graphpagerequests(recipientid, requeststring) {
 	return new Promise(function(resolve, reject) {
     // Do the usual XHR stuff
 	var success = '0';
@@ -613,7 +613,7 @@ function graphpagerequests(requeststring) {
 			}
 			reject(errormessage);
 		} else {if (fbresponse && fbresponse['category']) {
-			resolve(fbresponse); //This is the meat of the application
+			resolve({'recipient':recipientid, 'response':fbresponse}); //This is the meat of the application
 			} else {
 				errormessage='The message has no error, it has no category, it may not be even a json.'
 				reject(errormessage);
@@ -631,7 +631,7 @@ function graphpagerequests(requeststring) {
 
 }
 
-function graphlikerequests(requeststring) {
+function graphlikerequests(recipientid, requeststring) {
 	return new Promise(function(resolve, reject) {
     // Do the usual XHR stuff
 	var success = '0';
@@ -688,7 +688,7 @@ function graphlikerequests(requeststring) {
 			}
 			reject(errormessage);
 		} else {if (fbresponse && fbresponse['data']) {
-			resolve(fbresponse['data']); //This is the meat of the application
+			resolve({'recipient':recipientid, 'response':fbresponse['data']); //This is the meat of the application
 			} else {
 				errormessage='The message has no error, it has no category, it may not be even a json.'
 				reject(errormessage);
@@ -704,7 +704,6 @@ function graphlikerequests(requeststring) {
 }
 
 function parseinput(recipient, adr){
-	var recipientid=recipient;
 	var parsed_adr = url.parse(adr, true);
 	var path=parsed_adr.pathname;
 	console.log(path);
@@ -727,8 +726,10 @@ function parseinput(recipient, adr){
 		console.log(path + '  Ezt már le is lehet kérni a FB-tól.');
 			var pageoutput;
 			var likeoutput;
-			graphpagerequests(adr+ '?fields=name,category').then(function(response) {
-				pageoutput=response;
+			var recipientfbid;
+			graphpagerequests(recipient, adr+ '?fields=name,category').then(function(response) {
+				recipientfbid=response['recipient'];
+				pageoutput=response['response'];
 				//console.log("Success graphpagerequest! ... ", response)
 				graphlikerequests(adr+'/likes?fields=name,category').then(function(response) {
 					likeoutput=response;
