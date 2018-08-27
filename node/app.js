@@ -744,8 +744,11 @@ function parseinput(recipient, adr){
 					var likecats=[];
 					var uniquelikestring='';
 					var uniquelikecats=[];
-					for (like of likeoutput) {						
+					var forcount=0;					
+					for (forcount=0; forcount < likeoutput.length; forcount++) {						
 						likecount++;
+						var like=likeoutput[forcount];
+						console.log('Itt tart a for loop ' + forcount);
 						likecats.push(like['category']);						
 						if (like['category']==pagecat){
 							samelikecount++;
@@ -755,7 +758,8 @@ function parseinput(recipient, adr){
 					console.log('Likes in the same category:  ' + samelikecount);
 					console.log('Number of likes: ' + likecount);
 					console.log(likecats);
-					for (likecat of likecats) {
+					for (forcount=0; forcount < likecats.length; forcount++) {
+						var likecat=likecats[forcount];
 						if (!contains(uniquelikecats, likecat)){
 							uniquelikecats.push(likecat);
 							uniquelikecount++;
