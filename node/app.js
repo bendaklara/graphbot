@@ -728,11 +728,11 @@ function parseinput(recipient, adr){
 			var likeoutput;
 			var recipientfbid;
 			graphpagerequests(recipient, adr+ '?fields=name,category').then(function(response) {
-				recipientfbid=response['recipient'];
 				pageoutput=response['response'];
 				//console.log("Success graphpagerequest! ... ", response)
-				graphlikerequests(adr+'/likes?fields=name,category').then(function(response) {
-					likeoutput=response;
+				graphlikerequests(response['recipient'], adr+'/likes?fields=name,category').then(function(response) {
+					recipientfbid=response['recipient'];
+					likeoutput=response['response'];
 					//console.log("Success graphlikerequest! ... ", response);
 					//console.log('This is the result of both requests: ');
 					//console.log(pageoutput);
@@ -776,9 +776,9 @@ function parseinput(recipient, adr){
 					//console.log(firstmessage);
 					//console.log(secondmessage);
 					//console.log(thirdmessage);
-					sendTextMessage(recipipentid, firstmessage);
-					sendTextMessage(recipipentid, secondmessage);
-					sendTextMessage(recipipentid, thirdmessage);
+					sendTextMessage(recipipentfbid, firstmessage);
+					sendTextMessage(recipipentfbid, secondmessage);
+					sendTextMessage(recipipentfbid, thirdmessage);
 
 
 					
