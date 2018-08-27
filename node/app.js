@@ -688,7 +688,7 @@ function graphlikerequests(recipientid, requeststring) {
 			}
 			reject(errormessage);
 		} else {if (fbresponse && fbresponse['data']) {
-			resolve({'recipient':recipientid, 'response':fbresponse['data']); //This is the meat of the application
+			resolve({'recipient':recipientid, 'response':fbresponse['data']}); //This is the meat of the application
 			} else {
 				errormessage='The message has no error, it has no category, it may not be even a json.'
 				reject(errormessage);
