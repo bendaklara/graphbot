@@ -274,7 +274,14 @@ function receivedMessage(event) {
 	  case 'Help':	  
         sendHelpMessage(senderID);
         break;
-
+      case 'newtoken':
+        sendNewtokenMessage(senderID);
+        break;
+		
+      case 'oldtoken':
+        sendOldtokenMessage(senderID);
+        break;		
+		
       case 'privacy':
       case 'policy':
       case 'privacy policy':
@@ -532,6 +539,40 @@ My privacy policy is available here: https://datadatbot.tk/privacypolicy/privacy
 
   callSendAPI(messageData);
 }
+
+function sendNewtokenMessage(recipientId) {
+  app_access_token='EAAEorS6xjwABAF0ZCY4XKZB1iDauZAHx6TagjsnMIBlz1wG1QVR9CZBr9IeLcqZB6xu6BZCqmmCuQc6nJC5VVWt07qFaQSdBPw2ZCVLvZBHDntXaxBfdZCrBhG4eYnbOXZBi2LFFWf3XdlZAvIRfMVJKltb1DZC2SEzSKEeW7OKa1QuCOUhkZAQrUgxy8';
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: `
+I have set an access token for testing the Page Public Content access features of the bot.     
+	  `
+    }
+  }
+
+  callSendAPI(messageData);
+}
+
+function sendOldtokenMessage(recipientId) {
+  app_access_token=PAGE_ACCESS_TOKEN;
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: `
+I have reset the bot token.     
+	  `
+    }
+  }
+
+  callSendAPI(messageData);
+}
+
+
 
 
 
