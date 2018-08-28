@@ -797,7 +797,7 @@ function parseinput(recipient, adr){
 					var forcount=0;	
 					var firstmessage='';
 					var secondmessage='';
-					var pageorpages=' pages ';					
+					var pageorpages=' page ';					
 					for (forcount=0; forcount < likeoutput.length; forcount++) {						
 						likecount++;
 						var like=likeoutput[forcount];
@@ -826,7 +826,7 @@ function parseinput(recipient, adr){
 						secondmessage='The kinds of pages liked by this page: ' + uniquelikestring.slice(0,-2)+'.';
 					}
 					//Response messages are constructed.
-					if (samelikecount>1){pageorpages=' page '}
+					if (samelikecount>1){pageorpages=' pages '}
 					firstmessage='The page ' + pagename + ' belongs to the Category ' + pagecat + '. This page 💚 likes ' + samelikecount + pageorpages + 'in the same Category, out of a total of ' + likecount + ' pages liked.';
 				
 				
