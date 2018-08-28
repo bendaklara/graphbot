@@ -27,7 +27,6 @@ var options = {
   , headers:  { connection:  "keep-alive" }
 };
 
-var app_access_token='EAAEorS6xjwABAF0ZCY4XKZB1iDauZAHx6TagjsnMIBlz1wG1QVR9CZBr9IeLcqZB6xu6BZCqmmCuQc6nJC5VVWt07qFaQSdBPw2ZCVLvZBHDntXaxBfdZCrBhG4eYnbOXZBi2LFFWf3XdlZAvIRfMVJKltb1DZC2SEzSKEeW7OKa1QuCOUhkZAQrUgxy8';
 var match='/';
 
 var app = express();
@@ -56,7 +55,8 @@ const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
 const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
   (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
   config.get('pageAccessToken');
-
+//var app_access_token='EAAEorS6xjwABAF0ZCY4XKZB1iDauZAHx6TagjsnMIBlz1wG1QVR9CZBr9IeLcqZB6xu6BZCqmmCuQc6nJC5VVWt07qFaQSdBPw2ZCVLvZBHDntXaxBfdZCrBhG4eYnbOXZBi2LFFWf3XdlZAvIRfMVJKltb1DZC2SEzSKEeW7OKa1QuCOUhkZAQrUgxy8';
+var app_access_token=PAGE_ACCESS_TOKEN
 // URL where the app is running (include protocol). Used to point to scripts and 
 // assets located at this address. 
 const SERVER_URL = (process.env.SERVER_URL) ?
@@ -506,7 +506,7 @@ function sendHelpMessage(recipientId) {
     },
     message: {
       text: `
-		'Give me the name of a FB page! You can write https://www.facebook.com/facebook, facebook, https://facebook.com/Birds-of-a-Feather-2179257909023050 or 2179257909023050'
+		Give me the name of a FB page! You can write https://www.facebook.com/facebook, facebook, https://facebook.com/Birds-of-a-Feather-2179257909023050 or 2179257909023050
 	  `
     }
   }
