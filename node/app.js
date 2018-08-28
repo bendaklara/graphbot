@@ -332,17 +332,23 @@ function receivedPostback(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfPostback = event.timestamp;
-
+  var payloadresponse='';
   // The 'payload' param is a developer-defined field which is set in a postback 
   // button for Structured Messages. 
   var payload = event.postback.payload;
 
   console.log("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
-
+  if (payload=='GETSTARTED_PAYLOAD'){
+	  payloadresponse='Hello. I am here to help you explore if pages of a feather flock together on Facebook. Blurt out a page name, or type 'help' for some fluffy instructions.'
+  }
+  if (payload=='HOWTO_PAYLOAD'){
+	  payloadresponse='Give me the name of a FB page! You can write https://www.facebook.com/facebook, facebook, https://facebook.com/Birds-of-a-Feather-2179257909023050 or 2179257909023050';  
+ }
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  
+  sendTextMessage(senderID, payloadresponse);
 }
 
 /*
@@ -500,7 +506,7 @@ function sendHelpMessage(recipientId) {
     },
     message: {
       text: `
-		Hello. I am here to help you explore if pages of a feather flock together on Facebook. Blurt out a page name, or type 'help' for some fluffy instructions.”
+		'Give me the name of a FB page! You can write https://www.facebook.com/facebook, facebook, https://facebook.com/Birds-of-a-Feather-2179257909023050 or 2179257909023050'
 	  `
     }
   }
