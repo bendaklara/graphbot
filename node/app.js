@@ -340,7 +340,7 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
   if (payload=='GETSTARTED_PAYLOAD'){
-	  payloadresponse='Hello. I am here to help you explore if pages of a feather flock together on Facebook. Blurt out a page name, or type 'help' for some fluffy instructions.'
+	  payloadresponse='Hello. I am here to help you explore if pages of a feather flock together on Facebook. Blurt out a page name, or type help for some fluffy instructions.'
   }
   if (payload=='HOWTO_PAYLOAD'){
 	  payloadresponse='Give me the name of a FB page! You can write https://www.facebook.com/facebook, facebook, https://facebook.com/Birds-of-a-Feather-2179257909023050 or 2179257909023050';  
