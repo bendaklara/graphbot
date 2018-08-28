@@ -269,9 +269,10 @@ function receivedMessage(event) {
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
     switch (messageText.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
-      case 'hello':
-      case 'hi':
-        sendHiMessage(senderID);
+      case 'help':
+      case 'Help!':
+	  case 'Help':	  
+        sendHelpMessage(senderID);
         break;
 
       case 'privacy':
@@ -289,7 +290,7 @@ function receivedMessage(event) {
         sendGraph(senderID, messageText);
     }
   } else if (messageAttachments) {
-    sendTextMessage(senderID, "I can only translate text, sorry");
+    sendTextMessage(senderID, "What is all the fluff with attachments? Blurt out a page name instead.");
   }
 }
 
@@ -492,14 +493,14 @@ function sendFileMessage(recipientId) {
   callSendAPI(messageData);
 }
 
-function sendHiMessage(recipientId) {
+function sendHelpMessage(recipientId) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
       text: `
-		Hello. I am GraphBot.
+		Hello. I am here to help you explore if pages of a feather flock together on Facebook. Blurt out a page name, or type 'help' for some fluffy instructions.”
 	  `
     }
   }
@@ -518,7 +519,7 @@ function sendPPMessage(recipientId) {
     },
     message: {
       text: `
-My privacy policy is available here: https://datadatbot.tk/privacypolicy/privacypolicy.html     
+My privacy policy is available here: https://datadatbot.tk/privacypolicy/privacypolicybirdsbot.html     
 	  `
     }
   }
@@ -561,7 +562,7 @@ function graphpagerequests(recipientid, requeststring) {
     // Do the usual XHR stuff
 	var success = '0';
 	//FB Error message set up.
-	var generic_error_message='Oops. Something went awry. I have no clue what went wrong.'; // Ezt kapja, ha nem azonosítottuk a hiba okát.
+	var generic_error_message='Oops. Something went awry. I have no clue what went wrong. How about trying another page?'; // Ezt kapja, ha nem azonosítottuk a hiba okát.
 	//Az üzenetet az elérhető infóval a különböző logikai vizsgálatok alapján feltöltjük tartalommal. 
 	//Ha nem kapna tartalmat, az általános hibára inicializáljuk. 
 	var errormessage=generic_error_message; 
@@ -589,21 +590,21 @@ function graphpagerequests(recipientid, requeststring) {
 				//Let the message be appropriate to the error code
 				switch (code) {
 					case 10:
-						errormessage='I am only half a bot right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.';
+						errormessage='I am totally ruffled right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.';
 					break;
 
 					case 803:
-						errormessage='I could not find this page on Facebook. Your fault, not mine. Give me a page that exists!';
+						errormessage='I could not find this page on Facebook. Your fault, not mine. Twitter a page that exists!';
 					break;
 
 					case 190:
-						errormessage='Oh my! I am too blushed for a bot right now. There is a problem with my Fb authentication. Please excuse me, but I cannot respond to your queries right now.';
+						errormessage='Oh my! I am too blushed for a bird right now. There is a problem with my Fb authentication. Please excuse me, but I cannot respond to your queries right now.';
 						break;
 
 					default:
 						//Generic error message. 
 						//message='Ooops! There was an error. How about trying another page?';
-						errormessage=generic_error_message + ' Unknown code.' ;
+						errormessage=generic_error_message;
 				}
 			
 			} else {
@@ -615,7 +616,7 @@ function graphpagerequests(recipientid, requeststring) {
 		} else {if (fbresponse && fbresponse['category']) {
 			resolve({'recipient':recipientid, 'response':fbresponse}); //This is the meat of the application
 			} else {
-				errormessage='The message has no error, it has no category, it may not be even a json.'
+				errormessage='I am totally ruffled right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.'
 				reject({'recipient':recipientid, 'response':errormessage});
 				
 			}
@@ -664,21 +665,21 @@ function graphlikerequests(recipientid, requeststring) {
 				//Let the message be appropriate to the error code
 				switch (code) {
 					case 10:
-						errormessage='I am only half a bot right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.';
+						errormessage='I am totally ruffled right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.';
 					break;
 
 					case 803:
-						errormessage='I could not find this page on Facebook. Your fault, not mine. Give me a page that exists!';
+						errormessage='I could not find this page on Facebook. Your fault, not mine. Twitter a page that exists!';
 					break;
 
 					case 190:
-						errormessage='Oh my! I am too blushed for a bot right now. There is a problem with my Fb authentication. Please excuse me, but I cannot respond to your queries right now.';
+						errormessage='Oh my! I am too blushed for a bird right now. There is a problem with my Fb authentication. Please excuse me, but I cannot respond to your queries right now.';
 						break;
 
 					default:
 						//Generic error message. 
 						//message='Ooops! There was an error. How about trying another page?';
-						errormessage=generic_error_message + ' Unknown code.' ;
+						errormessage=generic_error_message ;
 				}
 			
 			} else {
@@ -690,7 +691,7 @@ function graphlikerequests(recipientid, requeststring) {
 		} else {if (fbresponse && fbresponse['data']) {
 			resolve({'recipient':recipientid, 'response':fbresponse['data']}); //This is the meat of the application
 			} else {
-				errormessage='The message has no error, it has no category, it may not be even a json.'
+				errormessage='I am totally ruffled right now. Please excuse my confusion. I am still waiting to pass the review by Facebook to be able to serve you.'
 				reject({'recipient':recipientid, 'response':errormessage});
 				
 			}
@@ -748,7 +749,8 @@ function parseinput(recipient, adr){
 					var uniquelikecats=[];
 					var forcount=0;	
 					var firstmessage='';
-					var secondmessage='';					
+					var secondmessage='';
+					var pageorpages=' pages ';					
 					for (forcount=0; forcount < likeoutput.length; forcount++) {						
 						likecount++;
 						var like=likeoutput[forcount];
@@ -777,7 +779,8 @@ function parseinput(recipient, adr){
 						secondmessage='The kinds of pages liked by this page: ' + uniquelikestring.slice(0,-2)+'.';
 					}
 					//Response messages are constructed.
-					firstmessage='The page ' + pagename + ' belongs to the Category ' + pagecat + '. This page 💚 likes ' + samelikecount + ' pages in the same Category, out of a total of ' + likecount + ' pages liked.';
+					if (samelikecount>1){pageorpages=' page '}
+					firstmessage='The page ' + pagename + ' belongs to the Category ' + pagecat + '. This page 💚 likes ' + samelikecount + pageorpages + 'in the same Category, out of a total of ' + likecount + ' pages liked.';
 				
 				
 					//console.log(firstmessage);
@@ -803,7 +806,7 @@ function parseinput(recipient, adr){
 		
 	} else {
 	
-		sendTextMessage(recipient,'I could not find this page on Facebook. Your fault, not mine. Give me a page that exists!');
+		sendTextMessage(recipient,'I could not find this page on Facebook. Your fault, not mine. Chirp in with a page that exists!');
 	}	
 }
 
