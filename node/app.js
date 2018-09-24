@@ -55,8 +55,11 @@ const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
 const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
   (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
   config.get('pageAccessToken');
-//var app_access_token='EAAEorS6xjwABAF0ZCY4XKZB1iDauZAHx6TagjsnMIBlz1wG1QVR9CZBr9IeLcqZB6xu6BZCqmmCuQc6nJC5VVWt07qFaQSdBPw2ZCVLvZBHDntXaxBfdZCrBhG4eYnbOXZBi2LFFWf3XdlZAvIRfMVJKltb1DZC2SEzSKEeW7OKa1QuCOUhkZAQrUgxy8';
-var app_access_token=PAGE_ACCESS_TOKEN
+// Set background access token
+const WORKER_PAGE_ACCESS_TOKEN = (process.env.MESSENGER_WORKER_PAGE_ACCESS_TOKEN) ?
+  (process.env.MESSENGER_WORKER_PAGE_ACCESS_TOKEN) :
+  config.get('workerPageAccessToken');
+  console.log(WORKER_PAGE_ACCESS_TOKEN);
 // URL where the app is running (include protocol). Used to point to scripts and 
 // assets located at this address. 
 const SERVER_URL = (process.env.SERVER_URL) ?
@@ -540,38 +543,6 @@ My privacy policy is available here: https://datadatbot.tk/privacypolicy/privacy
   callSendAPI(messageData);
 }
 
-function sendNewtokenMessage(recipientId) {
-  app_access_token='EAAEorS6xjwABAF0ZCY4XKZB1iDauZAHx6TagjsnMIBlz1wG1QVR9CZBr9IeLcqZB6xu6BZCqmmCuQc6nJC5VVWt07qFaQSdBPw2ZCVLvZBHDntXaxBfdZCrBhG4eYnbOXZBi2LFFWf3XdlZAvIRfMVJKltb1DZC2SEzSKEeW7OKa1QuCOUhkZAQrUgxy8';
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: `
-I have set an access token for testing the Page Public Content access features of the bot.     
-	  `
-    }
-  }
-
-  callSendAPI(messageData);
-}
-
-function sendOldtokenMessage(recipientId) {
-  app_access_token=PAGE_ACCESS_TOKEN;
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: `
-I have reset the bot token.     
-	  `
-    }
-  }
-
-  callSendAPI(messageData);
-}
-
 
 
 
@@ -615,7 +586,7 @@ function graphpagerequests(recipientid, requeststring) {
 	var errormessage=generic_error_message; 
 	
 	graph
-	.setAccessToken(app_access_token)
+	.setAccessToken(WORKER_PAGE_ACCESS_TOKEN)
 	.setOptions(options)
 	.get(requeststring , function(err, fbresponse) {
 		console.log('Raw Fb response: ' + JSON.stringify(fbresponse));
@@ -690,7 +661,7 @@ function graphlikerequests(recipientid, requeststring) {
 	var errormessage=generic_error_message; 
 	
 	graph
-	.setAccessToken(app_access_token)
+	.setAccessToken(WORKER_PAGE_ACCESS_TOKEN)
 	.setOptions(options)
 	.get(requeststring , function(err, fbresponse) {
 		console.log('Raw Fb response: ' + JSON.stringify(fbresponse));
